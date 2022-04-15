@@ -1,0 +1,106 @@
+datasource postgres {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  createdAt DateTime @default(now())
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  player    Player?  @relation(fields: [playerId], references: [id])
+  playerId  String?
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  profileId String?
+  roles     String[]
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
+
+model Profile {
+  avatarUrl String?
+  bio       String?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  updatedAt DateTime @updatedAt
+  user      User
+}
+
+model Game {
+  createdAt    DateTime @default(now())
+  currentRound Int?
+  decks        Deck[]
+  id           String   @id @default(cuid())
+  players      Player[]
+  rounds       Round[]
+  totalRounds  Int
+  updatedAt    DateTime @updatedAt
+}
+
+model Deck {
+  blackCards BlackCard[]
+  createdAt  DateTime    @default(now())
+  game       Game?       @relation(fields: [gameId], references: [id])
+  gameId     String?
+  id         String      @id @default(cuid())
+  identifier String      @unique
+  title      String?     @unique
+  updatedAt  DateTime    @updatedAt
+  whiteCards WhiteCard[]
+}
+
+model BlackCard {
+  createdAt DateTime @default(now())
+  deck      Deck?    @relation(fields: [deckId], references: [id])
+  deckId    String?
+  discarded Boolean?
+  id        String   @id @default(cuid())
+  rounds    Round[]
+  text      String?
+  updatedAt DateTime @updatedAt
+}
+
+model WhiteCard {
+  createdAt  DateTime @default(now())
+  deck       Deck?    @relation(fields: [deckId], references: [id])
+  deckId     String?
+  discoarded Boolean?
+  id         String   @id @default(cuid())
+  players    Player?  @relation(fields: [playersId], references: [id])
+  playersId  String?
+  rounds     Round[]
+  selected   Boolean?
+  text       String
+  updatedAt  DateTime @updatedAt
+}
+
+model Player {
+  createdAt DateTime    @default(now())
+  czars     Round[]
+  game      Game?       @relation(fields: [gameId], references: [id])
+  gameId    String?
+  hand      WhiteCard[]
+  id        String      @id @default(cuid())
+  score     Int?
+  updatedAt DateTime    @updatedAt
+  user      User
+}
+
+model Round {
+  blackCard     BlackCard? @relation(fields: [blackCardId], references: [id])
+  blackCardId   String?
+  createdAt     DateTime   @default(now())
+  czar          Player?    @relation(fields: [czarId], references: [id])
+  czarId        String?
+  game          Game?      @relation(fields: [gameId], references: [id])
+  gameId        String?
+  id            String     @id @default(cuid())
+  updatedAt     DateTime   @updatedAt
+  winningCard   WhiteCard? @relation(fields: [winningCardId], references: [id])
+  winningCardId String?
+}
