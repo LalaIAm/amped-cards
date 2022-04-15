@@ -1,0 +1,19 @@
+{
+  "dataServiceGeneratorVersion": "0.12.4",
+  "appInfo": {
+    "name": "Despicable Cards",
+    "description": "",
+    "version": "ai09xn1g",
+    "id": "cl203hw7e161366301s62jt0f02c",
+    "url": "https://app.amplication.com/cl203hw7e161366301s62jt0f02c",
+    "settings": {
+      "dbHost": "localhost",
+      "dbName": "",
+      "dbPassword": "admin",
+      "dbPort": 5432,
+      "dbUser": "admin",
+      "appId": "cl203hw7e161366301s62jt0f02c",
+      "authProvider": "Jwt"
+    }
+  }
+}
